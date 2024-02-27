@@ -72,7 +72,7 @@ def run(job: InputSchema):
         Path(output_path).mkdir(parents=True, exist_ok=True)
         image.save(f"{output_path}/{DEFAULT_FILENAME}")
 
-    return image
+    return image_b64
 
 
 if __name__ == "__main__":
