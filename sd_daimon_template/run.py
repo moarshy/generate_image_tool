@@ -72,7 +72,9 @@ def run(job: InputSchema):
         Path(output_path).mkdir(parents=True, exist_ok=True)
         image.save(f"{output_path}/{DEFAULT_FILENAME}")
 
-    return image_b64
+        return f"Image saved to {output_path}/{DEFAULT_FILENAME}"
+
+    return "Image generated successfully"
 
 
 if __name__ == "__main__":
