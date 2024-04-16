@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "sd-daimon-template"
+name = "generate_image"
 version = "0.1.0"
 description = ""
 authors = ["moarshy <marshath@gmail.com>"]
 readme = "README.md"
 packages = [
-    { include = "sd_daimon_template", from = "." }
+    { include = "generate_image", from = "." }
 ]
 
 [tool.poetry.dependencies]

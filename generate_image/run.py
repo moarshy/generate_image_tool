@@ -6,7 +6,7 @@ from PIL import Image
 from io import BytesIO
 from pathlib import Path
 from dotenv import load_dotenv
-from sd_daimon_template.schemas import InputSchema
+from generate_image.schemas import InputSchema
 
 
 load_dotenv()
@@ -28,6 +28,9 @@ def get_logger(__name__):
 logger = get_logger(__name__)
 
 def run(job: InputSchema):
+    """Run the job to generate image from text prompt using Stability API"""
+    logger.info(f"Generating image from prompt: {job.prompt}")
+    
     # Get api key from environment variable
     api_key = os.environ['STABILITY_KEY']
 
