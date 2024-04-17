@@ -27,7 +27,7 @@ def get_logger(__name__):
 
 logger = get_logger(__name__)
 
-def run(job: InputSchema):
+def run(job: InputSchema, cfg):
     """Run the job to generate image from text prompt using Stability API"""
     logger.info(f"Generating image from prompt: {job.prompt}")
     
