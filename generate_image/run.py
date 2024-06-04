@@ -1,35 +1,24 @@
 import os
 import base64
-import logging
 import requests
 from PIL import Image
 from io import BytesIO
 from pathlib import Path
 from dotenv import load_dotenv
 from generate_image.schemas import InputSchema
-
+from naptha_sdk.utils import get_logger
+from typing import Dict
 
 load_dotenv()
 STABILITY_API_HOST = "https://api.stability.ai"
 DEFAULT_FILENAME = "output.png"
 DEFAULT_ENGINE = "stable-diffusion-xl-1024-v1-0"
 
-def get_logger(__name__):
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
-    return logger
-
-
 logger = get_logger(__name__)
 
-def run(job: InputSchema, cfg):
-    """Run the job to generate image from text prompt using Stability API"""
-    logger.info(f"Generating image from prompt: {job.prompt}")
+def run(inputs: InputSchema, worker_nodes = None, orchestrator_node = None, flow_run = None, cfg: Dict = None):
+    """Run the module to generate image from text prompt using Stability API"""
+    logger.info(f"Generating image from prompt: {inputs.prompt}")
     
     # Get api key from environment variable
     api_key = os.environ['STABILITY_KEY']
@@ -48,7 +37,7 @@ def run(job: InputSchema, cfg):
         "steps": 30,
         "text_prompts": [
             {
-            "text": job.prompt,
+            "text": inputs.prompt,
             "weight": 1
             }
         ]
@@ -70,8 +59,8 @@ def run(job: InputSchema, cfg):
     image_b64 = result['artifacts'][0]['base64']
     image = Image.open(BytesIO(base64.b64decode(image_b64)))
 
-    if job.output_path:
-        output_path = job.output_path
+    if inputs.output_path:
+        output_path = inputs.output_path
         Path(output_path).mkdir(parents=True, exist_ok=True)
         image.save(f"{output_path}/{DEFAULT_FILENAME}")
 
@@ -81,8 +70,8 @@ def run(job: InputSchema, cfg):
 
 
 if __name__ == "__main__":
-    input = InputSchema(
+    inputs = InputSchema(
         prompt="expansive landscape rolling greens with gargantuan yggdrasil, intricate world-spanning roots towering under a blue alien sky, masterful, ghibli",
         output_path="output"
     )
-    run(input)
+    run(inputs)
