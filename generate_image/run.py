@@ -16,7 +16,7 @@ DEFAULT_ENGINE = "stable-diffusion-xl-1024-v1-0"
 
 logger = get_logger(__name__)
 
-def run(inputs: InputSchema, worker_nodes = None, orchestrator_node = None, flow_run = None, cfg: Dict = None):
+def run(inputs: InputSchema, *args, **kwargs):
     """Run the module to generate image from text prompt using Stability API"""
     logger.info(f"Generating image from prompt: {inputs.prompt}")
     
