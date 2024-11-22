@@ -6,19 +6,21 @@ from io import BytesIO
 from pathlib import Path
 from dotenv import load_dotenv
 from generate_image.schemas import InputSchema
-from naptha_sdk.utils import get_logger
 from typing import Dict
+import logging
+from naptha_sdk.schemas import AgentRunInput
+
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 STABILITY_API_HOST = "https://api.stability.ai"
 DEFAULT_FILENAME = "output.png"
 DEFAULT_ENGINE = "stable-diffusion-xl-1024-v1-0"
 
-logger = get_logger(__name__)
-
-def run(inputs: InputSchema, *args, **kwargs):
+def run(agent_run: AgentRunInput, *args, **kwargs):
     """Run the module to generate image from text prompt using Stability API"""
-    logger.info(f"Generating image from prompt: {inputs.prompt}")
+    logger.info(f"Generating image from prompt: {agent_run.input.prompt}")
     
     # Get api key from environment variable
     api_key = os.environ['STABILITY_API_KEY']
@@ -37,7 +39,7 @@ def run(inputs: InputSchema, *args, **kwargs):
         "steps": 30,
         "text_prompts": [
             {
-            "text": inputs.prompt,
+            "text": agent_run.input.prompt,
             "weight": 1
             }
         ]
@@ -59,8 +61,8 @@ def run(inputs: InputSchema, *args, **kwargs):
     image_b64 = result['artifacts'][0]['base64']
     image = Image.open(BytesIO(base64.b64decode(image_b64)))
 
-    if inputs.output_path:
-        output_path = inputs.output_path
+    if agent_run.agent_deployment.data_generation_config.output_path:
+        output_path = agent_run.agent_deployment.data_generation_config.save_outputs_path
         Path(output_path).mkdir(parents=True, exist_ok=True)
         image.save(f"{output_path}/{DEFAULT_FILENAME}")
 
