@@ -20,7 +20,7 @@ DEFAULT_ENGINE = "stable-diffusion-xl-1024-v1-0"
 
 def run(agent_run: AgentRunInput, *args, **kwargs):
     """Run the module to generate image from text prompt using Stability API"""
-    logger.info(f"Generating image from prompt: {agent_run.input.prompt}")
+    logger.info(f"Generating image from prompt: {agent_run.inputs.prompt}")
     
     # Get api key from environment variable
     api_key = os.environ['STABILITY_API_KEY']
@@ -39,7 +39,7 @@ def run(agent_run: AgentRunInput, *args, **kwargs):
         "steps": 30,
         "text_prompts": [
             {
-            "text": agent_run.input.prompt,
+            "text": agent_run.inputs.prompt,
             "weight": 1
             }
         ]
