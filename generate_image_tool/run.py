@@ -25,7 +25,7 @@ class GenerateImageTool():
 
     def generate_image_tool(self, inputs: InputSchema):
         """Run the module to generate image from text prompt using Stability API"""
-        logger.info(f"Generating image from prompt: {inputs['prompt']}")
+        logger.info(f"Generating image from prompt: {inputs.tool_input_data}")
 
         default_engine = self.tool_deployment.tool_config.llm_config.model
         default_filename = self.tool_deployment.data_generation_config.default_filename
@@ -41,7 +41,7 @@ class GenerateImageTool():
             "steps": 30,
             "text_prompts": [
                 {
-                "text": inputs['prompt'],
+                "text": inputs.tool_input_data,
                 "weight": 1
                 }
             ]
@@ -64,8 +64,6 @@ class GenerateImageTool():
         image_b64 = result['artifacts'][0]['base64']
         image = Image.open(BytesIO(base64.b64decode(image_b64)))
 
-        print("AAA", self.tool_deployment.data_generation_config)
-
         if self.tool_deployment.data_generation_config.save_outputs_path:
             output_path = self.tool_deployment.data_generation_config.save_outputs_path
             Path(output_path).mkdir(parents=True, exist_ok=True)
@@ -85,7 +83,7 @@ def run(tool_run: ToolRunInput, *args, **kwargs):
     if not method:
         raise ValueError(f"Method {tool_run.inputs.tool_name} not found")
 
-    result = method(tool_run.inputs.tool_input_data)
+    result = method(tool_run.inputs)
 
     return result
 
@@ -100,10 +98,7 @@ if __name__ == "__main__":
 
     input_params = InputSchema(
         tool_name="generate_image_tool",
-        tool_input_data={
-            "prompt": "expansive landscape rolling greens with gargantuan yggdrasil, intricate world-spanning roots towering under a blue alien sky, masterful, ghibli",
-            "output_path": "output"
-        }
+        tool_input_data="expansive landscape rolling greens with gargantuan yggdrasil, intricate world-spanning roots towering under a blue alien sky, masterful, ghibli"
     )
 
     tool_run = ToolRunInput(
