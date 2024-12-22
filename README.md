@@ -10,7 +10,7 @@ Naptha [Modules](https://docs.naptha.ai/NapthaModules/overview) are the building
 ### Run the Tool
 
 ```bash
-naptha run tool:generate_image_tool -p "prompt='expansive landscape rolling greens with gargantuan yggdrasil, intricate world-spanning roots towering under a blue alien sky, masterful, ghibli'"
+naptha run tool:generate_image_tool -p "tool_name='generate_image_tool', tool_input_data='expansive landscape rolling greens with gargantuan yggdrasil, intricate world-spanning roots towering under a blue alien sky, masterful, ghibli'"
 ```
 
 ### Run an Agent that uses the Tool
