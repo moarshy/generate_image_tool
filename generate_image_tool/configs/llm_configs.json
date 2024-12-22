@@ -1,0 +1,8 @@
+[
+    {
+        "config_name": "model_1",
+        "client": "stability",
+        "model": "stable-diffusion-xl-1024-v1-0",
+        "api_base": "https://api.stability.ai"
+    }
+]
