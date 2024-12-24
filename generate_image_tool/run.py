@@ -76,7 +76,7 @@ class GenerateImageTool():
 def run(tool_run: ToolRunInput, *args, **kwargs):
     """Run the module to generate image from text prompt using Stability API"""
     
-    generate_image_tool = GenerateImageTool(tool_run.tool_deployment)
+    generate_image_tool = GenerateImageTool(tool_run.deployment)
 
     method = getattr(generate_image_tool, tool_run.inputs.tool_name, None)
 
