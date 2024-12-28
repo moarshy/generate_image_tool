@@ -27,9 +27,9 @@ class GenerateImageTool():
         """Run the module to generate image from text prompt using Stability API"""
         logger.info(f"Generating image from prompt: {inputs.tool_input_data}")
 
-        default_engine = self.tool_deployment.tool_config.llm_config.model
+        default_engine = self.tool_deployment.config.llm_config.model
         default_filename = self.tool_deployment.data_generation_config.default_filename
-        url = f"{self.tool_deployment.tool_config.llm_config.api_base}/v1/generation/{default_engine}/text-to-image"
+        url = f"{self.tool_deployment.config.llm_config.api_base}/v1/generation/{default_engine}/text-to-image"
 
         data = {
             "cfg_scale": 7,
