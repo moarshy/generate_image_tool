@@ -73,17 +73,17 @@ class GenerateImageTool():
 
         return "Image generated successfully"
 
-def run(tool_run: ToolRunInput, *args, **kwargs):
+def run(module_run: ToolRunInput, *args, **kwargs):
     """Run the module to generate image from text prompt using Stability API"""
     
-    generate_image_tool = GenerateImageTool(tool_run.deployment)
+    generate_image_tool = GenerateImageTool(module_run.deployment)
 
-    method = getattr(generate_image_tool, tool_run.inputs.tool_name, None)
+    method = getattr(generate_image_tool, module_run.inputs.tool_name, None)
 
     if not method:
-        raise ValueError(f"Method {tool_run.inputs.tool_name} not found")
+        raise ValueError(f"Method {module_run.inputs.tool_name} not found")
 
-    result = method(tool_run.inputs)
+    result = method(module_run.inputs)
 
     return result
 
@@ -101,10 +101,10 @@ if __name__ == "__main__":
         tool_input_data="expansive landscape rolling greens with gargantuan yggdrasil, intricate world-spanning roots towering under a blue alien sky, masterful, ghibli"
     )
 
-    tool_run = ToolRunInput(
+    module_run = ToolRunInput(
         inputs=input_params,
         tool_deployment=tool_deployments[0],
         consumer_id=naptha.user.id,
     )
 
-    run(tool_run)
+    run(module_run)
