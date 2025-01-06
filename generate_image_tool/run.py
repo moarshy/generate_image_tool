@@ -5,8 +5,9 @@ from PIL import Image
 from io import BytesIO
 from pathlib import Path
 from dotenv import load_dotenv
-from generate_image_tool.schemas import InputSchema
 import logging
+from typing import Dict
+from generate_image_tool.schemas import InputSchema
 from naptha_sdk.schemas import ToolDeployment, ToolRunInput
 
 logger = logging.getLogger(__name__)
@@ -73,9 +74,10 @@ class GenerateImageTool():
 
         return "Image generated successfully"
 
-def run(module_run: ToolRunInput, *args, **kwargs):
+def run(module_run: Dict, *args, **kwargs):
     """Run the module to generate image from text prompt using Stability API"""
-    
+    module_run = ToolRunInput(**module_run)
+    module_run.inputs = InputSchema(**module_run.inputs)
     generate_image_tool = GenerateImageTool(module_run.deployment)
 
     method = getattr(generate_image_tool, module_run.inputs.tool_name, None)
@@ -89,22 +91,25 @@ def run(module_run: ToolRunInput, *args, **kwargs):
 
 
 if __name__ == "__main__":
+    import asyncio
     from naptha_sdk.client.naptha import Naptha
-    from naptha_sdk.configs import load_tool_deployments
+    from naptha_sdk.configs import setup_module_deployment
 
     naptha = Naptha()
 
-    tool_deployments = load_tool_deployments("generate_image_tool/configs/tool_deployments.json")
+    deployment = asyncio.run(setup_module_deployment("tool", "generate_image_tool/configs/deployment.json", node_url = os.getenv("NODE_URL")))
 
-    input_params = InputSchema(
-        tool_name="generate_image_tool",
-        tool_input_data="expansive landscape rolling greens with gargantuan yggdrasil, intricate world-spanning roots towering under a blue alien sky, masterful, ghibli"
-    )
+    input_params = {
+        "tool_name": "generate_image_tool",
+        "tool_input_data": "expansive landscape rolling greens with gargantuan yggdrasil, intricate world-spanning roots towering under a blue alien sky, masterful, ghibli"
+    }
 
-    module_run = ToolRunInput(
-        inputs=input_params,
-        tool_deployment=tool_deployments[0],
-        consumer_id=naptha.user.id,
-    )
+    module_run = {
+        "inputs": input_params,
+        "deployment": deployment,
+        "consumer_id": naptha.user.id,
+    }
 
-    run(module_run)
+    response = run(module_run)
+
+    print("Response: ", response)
