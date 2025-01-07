@@ -9,6 +9,7 @@ import logging
 from typing import Dict
 from generate_image_tool.schemas import InputSchema
 from naptha_sdk.schemas import ToolDeployment, ToolRunInput
+from naptha_sdk.user import sign_consumer_id
 
 logger = logging.getLogger(__name__)
 
@@ -108,6 +109,7 @@ if __name__ == "__main__":
         "inputs": input_params,
         "deployment": deployment,
         "consumer_id": naptha.user.id,
+        "signature": sign_consumer_id(naptha.user.id, os.getenv("PRIVATE_KEY"))
     }
 
     response = run(module_run)
