@@ -41,7 +41,7 @@ class GenerateImageTool():
             "steps": 30,
             "text_prompts": [
                 {
-                    "text": inputs.tool_input_data,
+                    "text": inputs.prompt,
                     "weight": 1
                 }
             ]
@@ -88,7 +88,7 @@ class GenerateImageTool():
             data={
                 "image_strength": 0.35,
                 "init_image_mode": "IMAGE_STRENGTH",
-                "text_prompts[0][text]": inputs.tool_input_data['prompt'],
+                "text_prompts[0][text]": inputs.prompt,
                 "cfg_scale": 7,
                 "samples": 1,
                 "steps": 30,
