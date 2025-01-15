@@ -66,8 +66,8 @@ class GenerateImageTool():
         url = f"{self.tool_deployment.config.llm_config.api_base}/v1/generation/{default_engine}/image-to-image"
 
         # Handle input image
-        if 'input_dir' in inputs.tool_input_data:
-            image_path = Path(inputs.tool_input_data['input_dir']).glob('*').__next__()
+        try:
+            image_path = Path(inputs.input_dir).glob('*').__next__()
             image = Image.open(image_path)
             image = image.resize((1024, 1024))
             temp_path = "/tmp/init_image.png"
@@ -75,7 +75,7 @@ class GenerateImageTool():
             files = {
                 "init_image": open(temp_path, "rb")
             }
-        else:
+        except Exception as e:
             raise ValueError("No image provided. Must provide either input_dir or base64 image")
 
         response = requests.post(
