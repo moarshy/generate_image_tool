@@ -23,7 +23,7 @@ class GenerateImageTool():
 
     def generate_image_tool(self, inputs: InputSchema):
         """Run the module to generate image from text prompt using Stability API"""
-        logger.info(f"Generating image from prompt: {inputs.tool_input_data}")
+        logger.info(f"Generating image from prompt: {inputs.prompt}")
         
         default_engine = self.tool_deployment.config.llm_config.model
         default_filename = self.tool_deployment.data_generation_config.default_filename
@@ -59,7 +59,7 @@ class GenerateImageTool():
 
     def image_to_image_tool(self, inputs: InputSchema):
         """Run the module to generate image from input image and text prompt using Stability API"""
-        logger.info(f"Generating image from prompt and input image: {inputs.tool_input_data['prompt']}")
+        logger.info(f"Generating image from prompt and input image: {inputs.prompt}")
         
         default_engine = self.tool_deployment.config.llm_config.model
         default_filename = self.tool_deployment.data_generation_config.default_filename
